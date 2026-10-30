@@ -1,0 +1,57 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+  functions = "netlify/functions"
+
+# 1. Chat routes (POST /api/chat and /api/chat/stream)
+[[redirects]]
+  from = "/api/chat/stream"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
+
+# 2. Cloud Computer Specs
+[[redirects]]
+  from = "/api/cloud-computer/specs"
+  to = "/.netlify/functions/specs"
+  status = 200
+  force = true
+
+# 3. Connectors routes
+[[redirects]]
+  from = "/api/connectors/*"
+  to = "/.netlify/functions/connectors"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/connectors"
+  to = "/.netlify/functions/connectors"
+  status = 200
+  force = true
+
+# 4. Fallback for any other /api/* route to master function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+  force = true
+
+# 5. SPA Client-Side Routing (All other routes to index.html)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"

@@ -1,0 +1,6 @@
+{
+  "name": "Axiom: First-Principles Theory & Possibility Engine",
+  "description": "Deep thinking AI research engine that stress-tests novel theories, bypasses consensus echo-chambers, and computes 99.99% empirical feasibility using first-principles physics and mathematics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
