@@ -43,29 +43,59 @@ Treat the project as a local prototype. Do not connect it to a machine or accoun
 
 ## Requirements
 
-- Node.js 22 LTS recommended
-- npm
+- Node.js 22.12.0 or newer (Node.js 22 LTS recommended)
+- npm 10 or newer
 - Gemini API key for chat
 - Firebase project and web-app configuration for Google sign-in
 
 ## Windows setup
 
-Clone the repository:
+Clone the repository (PowerShell):
 
 ```powershell
+New-Item -ItemType Directory -Force -Path D:\HMHS | Out-Null
+Set-Location D:\HMHS
 git clone https://github.com/noity0/hmhs-box-agent.git
-Set-Location hmhs-box-agent
+Set-Location D:\HMHS\hmhs-box-agent
+```
+
+Or use **Command Prompt (CMD)**:
+
+```cmd
+if not exist D:\HMHS mkdir D:\HMHS
+cd /d D:\HMHS
+git clone https://github.com/noity0/hmhs-box-agent.git
+cd /d D:\HMHS\hmhs-box-agent
+```
+
+If you already cloned the repository, do not clone it again. Open the existing folder instead:
+
+```powershell
+Set-Location D:\hmhs-box-agent
+git pull
+```
+
+Install dependencies:
+
+```powershell
 npm install
 ```
 
-Create the local environment file:
+Create the local environment file (safe to run repeatedly):
 
 ```powershell
-Copy-Item .env.example .env
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 notepad .env
 ```
 
-Set your own server-side Gemini key and local port:
+Equivalent CMD commands:
+
+```cmd
+if not exist .env copy .env.example .env
+notepad .env
+```
+
+Set your own Gemini key and local port in `.env` (never commit this file):
 
 ```dotenv
 GEMINI_API_KEY=your_gemini_api_key
@@ -89,6 +119,12 @@ Build the frontend:
 
 ```powershell
 npm run build
+```
+
+Remove generated output on Windows, macOS, or Linux:
+
+```powershell
+npm run clean
 ```
 
 The preview script serves the built frontend; it is not a substitute for the Express API server.
