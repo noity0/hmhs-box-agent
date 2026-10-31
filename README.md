@@ -144,3 +144,32 @@ Check the repository for a `LICENSE` file. If none is present, standard copyrigh
 ## Search terms
 
 AI assistant prototype, Gemini chat app, React AI interface, Firebase authentication, Express backend, coding workspace UI, AI agent interface, HMHS Box Agent.
+
+<!-- COMMUNITY-CONTRIBUTORS-SECTION -->
+## Contributors & community
+
+[![Contributors](https://img.shields.io/github/contributors/noity0/hmhs-box-agent?style=flat-square)](https://github.com/noity0/hmhs-box-agent/graphs/contributors)
+[![Pull requests](https://img.shields.io/github/issues-pr/noity0/hmhs-box-agent?style=flat-square)](https://github.com/noity0/hmhs-box-agent/pulls)
+[![Open issues](https://img.shields.io/github/issues/noity0/hmhs-box-agent?style=flat-square)](https://github.com/noity0/hmhs-box-agent/issues)
+
+<a href="https://github.com/noity0/hmhs-box-agent/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=noity0/hmhs-box-agent&max=100&columns=10" alt="GitHub contributors to hmhs-box-agent" />
+</a>
+
+This live contributor panel is generated from GitHub's repository contribution data. It shows real contributors when GitHub has qualifying contribution records; it does not imply endorsement by other developers or companies.
+
+### How to contribute
+
+1. Check the [open issues](https://github.com/noity0/hmhs-box-agent/issues) and [pull requests](https://github.com/noity0/hmhs-box-agent/pulls) before starting.
+2. Open an issue to discuss substantial changes.
+3. Fork the repository and create a focused branch.
+4. Keep pull requests small and explain the problem, solution, and testing performed.
+5. Update documentation and tests when behavior changes.
+6. Never commit API keys, passwords, private data, or other secrets.
+
+### Upstream projects & acknowledgements
+
+This project builds on the open-source tools named in its technology stack. Visit their official documentation and repositories to learn more, and follow each project's license and attribution requirements. Upstream maintainers and well-known developers are not listed as project contributors unless they have verifiable contributions here.
+
+- [GitHub: Contributing to projects](https://docs.github.com/en/get-started/quickstart/contributing-to-projects)
+- [GitHub: Project contributors](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors)
