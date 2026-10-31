@@ -11,6 +11,7 @@ import {
   Globe,
   HardDrive,
   Layers,
+  FileText,
 } from 'lucide-react';
 
 interface LandingScreenProps {
@@ -22,6 +23,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onEnterChat }) => 
   const [deepThinkingDefault, setDeepThinkingDefault] = useState<boolean>(true);
 
   const sampleCards = [
+    {
+      title: '100+ AI File Agents',
+      prompt: 'Generate an executive presentation (.pptx), financial analysis (.xlsx), and formal report (.docx) for our strategic roadmap',
+      tag: 'Real Binary Files',
+      icon: FileText,
+    },
     {
       title: 'Gmail & Personal Assistant',
       prompt: 'Draft an official update email regarding project deliverables for my review and sending via Gmail',
@@ -35,16 +42,10 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onEnterChat }) => 
       icon: Zap,
     },
     {
-      title: 'Deep Science & Physics',
+      title: 'Deep Science & First-Principles',
       prompt: 'Can you explain quantum entanglement, gravity, and the theoretical speed of light from first principles?',
       tag: 'Deep Science',
       icon: Cpu,
-    },
-    {
-      title: 'Roman Urdu & Daily Workflow',
-      prompt: 'Salam! Mujhe artificial intelligence aur modern computing ka future asaan Roman Urdu mein samjhao.',
-      tag: 'HMHS Assistant',
-      icon: Globe,
     },
   ];
 

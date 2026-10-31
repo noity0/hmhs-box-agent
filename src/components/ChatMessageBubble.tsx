@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { ChatMessage } from '../types';
-import { User, Copy, Check, Volume2, VolumeX, Sparkles, Mail, Send, Zap, ArrowRight } from 'lucide-react';
+import { User, Copy, Check, Volume2, VolumeX, Sparkles, Mail, Send, Zap, ArrowRight, FileText, Download } from 'lucide-react';
 import { marked } from 'marked';
 
 interface ChatMessageBubbleProps {
   message: ChatMessage;
   onOpenGmail?: (prefill?: { to?: string; subject?: string; body?: string }) => void;
   onOpenConnectors?: () => void;
+  onOpenFileAgents?: (preferredExt?: string) => void;
 }
 
 // Convert LaTeX \begin{array} tables and clean all broken inline LaTeX ($1\text{G}$, $c$, etc.)
@@ -108,6 +109,7 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
   message,
   onOpenGmail,
   onOpenConnectors,
+  onOpenFileAgents,
 }) => {
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -161,6 +163,27 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
   const hasConnectorReference = useMemo(() => {
     if (isUser) return false;
     return /(app connector|connectors hub|authorize sign-in|oauth client)/i.test(message.content);
+  }, [message.content, isUser]);
+
+  const fileAgentPrompt = useMemo(() => {
+    if (isUser) return null;
+    const lower = message.content.toLowerCase();
+    if (lower.includes('.pptx') || lower.includes('powerpoint') || lower.includes('presentation ready')) {
+      return { format: 'pptx', label: 'PowerPoint Presentation (.pptx)', agent: 'Agent #1: Presentation Engine' };
+    }
+    if (lower.includes('.xlsx') || lower.includes('excel') || lower.includes('spreadsheet generated')) {
+      return { format: 'xlsx', label: 'Excel Multi-Sheet Workbook (.xlsx)', agent: 'Agent #2: Spreadsheet Engine' };
+    }
+    if (lower.includes('.docx') || lower.includes('word document') || lower.includes('whitepaper')) {
+      return { format: 'docx', label: 'Word Document (.docx)', agent: 'Agent #3: Document Specialist' };
+    }
+    if (lower.includes('.pdf') || lower.includes('vector pdf')) {
+      return { format: 'pdf', label: 'Vector PDF Report (.pdf)', agent: 'Agent #4: Vector PDF Engine' };
+    }
+    if (lower.includes('100+ file') || lower.includes('file agents')) {
+      return { format: 'pptx', label: '100+ Specialized File Agents', agent: '100+ File Agents Matrix' };
+    }
+    return null;
   }, [message.content, isUser]);
 
   const handleCopy = () => {
@@ -285,21 +308,34 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
               </div>
             )}
 
-            {/* Connector Hub Quick Action Card */}
-            {hasConnectorReference && onOpenConnectors && (
-              <div className="mt-4 p-3 rounded-xl bg-indigo-950/30 border border-indigo-700/40 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <Zap className="w-4 h-4 text-cyan-400" />
-                  <span className="text-xs text-slate-300">
-                    Authorize real apps via the 24+ Connectors Hub
-                  </span>
+            {/* 100+ File Agents Action Card */}
+            {fileAgentPrompt && onOpenFileAgents && (
+              <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-cyan-950/40 via-indigo-950/40 to-slate-900 border border-cyan-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-cyan-600/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-white">{fileAgentPrompt.label}</span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-cyan-950 border border-cyan-800 text-cyan-300 font-mono">
+                        Native Binary Compiler
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      {fileAgentPrompt.agent} • Ready for 1-click browser compilation
+                    </p>
+                  </div>
                 </div>
+
                 <button
                   type="button"
-                  onClick={onOpenConnectors}
-                  className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono transition font-bold"
+                  onClick={() => onOpenFileAgents(fileAgentPrompt.format)}
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold font-sans transition flex items-center justify-center gap-2 shadow-md shadow-cyan-600/30 active:scale-95 shrink-0"
                 >
-                  Open 24+ Apps
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Compile & Download</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             )}

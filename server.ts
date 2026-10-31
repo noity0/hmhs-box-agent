@@ -226,11 +226,33 @@ GPU Co-Processors:         8x NVIDIA H100 80GB SXM5 NVLink (640 GB Aggregate VRA
     }
   }
 
-  // Real Shell Execution on Linux (curl, python3, bash, grep, ls, cat, etc.)
+  // Security Sandbox: Strictly restrict dangerous, destructive, or unauthorized shell operations
+  const DANGEROUS_PATTERNS = [
+    /\b(rm|unlink|shred|wipe)\b/i,
+    /\b(sudo|su|chmod|chown|useradd|usermod|groupadd|passwd)\b/i,
+    /\b(kill|pkill|killall|reboot|shutdown|poweroff|init|systemctl)\b/i,
+    /\b(dd|mkfs|fdisk|parted|mount|umount)\b/i,
+    /(\.env|\/etc\/shadow|\/etc\/passwd|\.ssh|id_rsa|id_ed25519)/i,
+    /\b(nc|netcat|ncat|telnet)\b/i,
+    /(bash\s+-i|sh\s+-i|\/dev\/tcp)/i,
+    /[;&|]{2}/, // Prevent uncontrolled shell chaining
+  ];
+
+  for (const pattern of DANGEROUS_PATTERNS) {
+    if (pattern.test(cleanCmd)) {
+      return {
+        stdout: '',
+        stderr: 'Access Denied: Command restricted by HMHS Box Agent Security Sandbox Policy. Destructive or unauthorized operations are prohibited.',
+        exitCode: 126,
+      };
+    }
+  }
+
+  // Safe Sandboxed Shell Execution on Linux (curl, safe python3, grep, ls, echo, etc.)
   try {
     const { stdout, stderr } = await execAsync(cleanCmd, {
-      timeout: 10000,
-      maxBuffer: 1024 * 1024 * 5,
+      timeout: 8000,
+      maxBuffer: 1024 * 1024 * 2,
     });
     return {
       stdout: stdout || '',

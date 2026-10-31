@@ -12,6 +12,8 @@ import {
   Cpu,
   Zap,
   Mail,
+  FileText,
+  Key,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -27,6 +29,8 @@ interface SidebarProps {
   onOpenConnectors?: () => void;
   onOpenGmail?: () => void;
   onOpenAuth?: () => void;
+  onOpenFileAgents?: () => void;
+  onOpenGeminiKey?: () => void;
   masterUser?: any;
 }
 
@@ -54,6 +58,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenConnectors,
   onOpenGmail,
   onOpenAuth,
+  onOpenFileAgents,
+  onOpenGeminiKey,
   masterUser,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -185,6 +191,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Mail className="w-4 h-4 text-red-400" />
               <span className="text-[10px] font-mono font-bold text-slate-200">Gmail</span>
               <span className="text-[9px] text-red-400 font-mono">Send/Read</span>
+            </button>
+          </div>
+
+          {/* 100+ File Agents & Gemini Key Quick Triggers */}
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                onOpenFileAgents?.();
+                onClose();
+              }}
+              className="p-2 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 transition flex items-center justify-center gap-2 group text-left"
+              title="100+ File Agents Matrix (PPTX, XLSX, DOCX, PDF, Code)"
+            >
+              <FileText className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <div className="truncate">
+                <span className="text-[10px] font-mono font-bold text-slate-200 block truncate">100+ Files</span>
+                <span className="text-[9px] text-cyan-400 font-mono block">PPTX/XLSX/DOCX</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                onOpenGeminiKey?.();
+                onClose();
+              }}
+              className="p-2 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/50 transition flex items-center justify-center gap-2 group text-left"
+              title="Configure Free Gemini 3.8 / 2.5 API Key"
+            >
+              <Key className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <div className="truncate">
+                <span className="text-[10px] font-mono font-bold text-slate-200 block truncate">Gemini Key</span>
+                <span className="text-[9px] text-amber-400 font-mono block">Free 3.8 / 2.5</span>
+              </div>
             </button>
           </div>
 

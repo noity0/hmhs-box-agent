@@ -7,6 +7,8 @@ import { CloudComputerModal } from './components/CloudComputerModal';
 import { AppConnectorsModal } from './components/AppConnectorsModal';
 import { GmailActionModal } from './components/GmailActionModal';
 import { MasterAuthModal } from './components/MasterAuthModal';
+import { FileAgentsStudioModal } from './components/FileAgentsStudioModal';
+import { GeminiKeyModal } from './components/GeminiKeyModal';
 import { ChatMessage, ChatSession } from './types';
 import { safeStorage } from './utils/storage';
 import { generateClientFallbackResponse } from './utils/clientChat';
@@ -28,6 +30,8 @@ import {
   CheckCircle2,
   ChevronDown,
   ChevronUp,
+  FileText,
+  Key,
 } from 'lucide-react';
 
 export default function App() {
@@ -46,6 +50,10 @@ export default function App() {
   const [masterUser, setMasterUser] = useState<MasterUser | null>(getMasterUser);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isAgentHudOpen, setIsAgentHudOpen] = useState<boolean>(false);
+  const [isFileStudioOpen, setIsFileStudioOpen] = useState<boolean>(false);
+  const [fileStudioInitialExt, setFileStudioInitialExt] = useState<string>('pptx');
+  const [isGeminiKeyModalOpen, setIsGeminiKeyModalOpen] = useState<boolean>(false);
+  const [hasCustomKey, setHasCustomKey] = useState<boolean>(() => !!safeStorage.getItem('hmhs_gemini_api_key'));
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -439,6 +447,11 @@ export default function App() {
         onOpenConnectors={() => setIsConnectorsModalOpen(true)}
         onOpenGmail={() => handleOpenGmailWithDraft()}
         onOpenAuth={() => setIsAuthModalOpen(true)}
+        onOpenFileAgents={() => {
+          setFileStudioInitialExt('pptx');
+          setIsFileStudioOpen(true);
+        }}
+        onOpenGeminiKey={() => setIsGeminiKeyModalOpen(true)}
         masterUser={masterUser}
       />
 
@@ -531,6 +544,44 @@ export default function App() {
               <span className="sm:hidden">Apps</span>
               <span className="px-1.5 py-0.2 rounded-full bg-cyan-900/80 text-[10px] text-cyan-300 font-mono font-bold">
                 OAuth
+              </span>
+            </button>
+
+            {/* 100+ Real File Agents Studio Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setFileStudioInitialExt('pptx');
+                setIsFileStudioOpen(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-700/60 text-xs font-mono text-cyan-300 hover:text-white transition shadow-sm hover:border-cyan-400 group"
+              title="100+ Dedicated AI File Agents (Real PPTX, XLSX, DOCX, PDF, Code Files)"
+            >
+              <FileText className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline font-bold">100+ File Agents</span>
+              <span className="sm:hidden font-bold">Files</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-cyan-900/80 text-[10px] text-cyan-200 font-mono font-bold">
+                PPTX/PDF
+              </span>
+            </button>
+
+            {/* Gemini API Key Configuration Button */}
+            <button
+              type="button"
+              onClick={() => setIsGeminiKeyModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-700/70 text-xs font-mono text-slate-300 hover:text-white transition shadow-sm hover:border-amber-400 group"
+              title="Configure Free Google Gemini 3.8 / 2.5 API Key"
+            >
+              <Key className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
+              <span className="hidden md:inline font-bold">Gemini Key</span>
+              <span
+                className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${
+                  hasCustomKey
+                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                    : 'bg-slate-800 text-slate-400'
+                }`}
+              >
+                {hasCustomKey ? 'Linked' : 'Free 3.8'}
               </span>
             </button>
 
@@ -679,6 +730,10 @@ export default function App() {
               message={msg}
               onOpenGmail={handleOpenGmailWithDraft}
               onOpenConnectors={() => setIsConnectorsModalOpen(true)}
+              onOpenFileAgents={(ext) => {
+                setFileStudioInitialExt(ext || 'pptx');
+                setIsFileStudioOpen(true);
+              }}
             />
           ))}
 
@@ -801,6 +856,20 @@ export default function App() {
           }
         }}
         onOpenConnectors={() => setIsConnectorsModalOpen(true)}
+      />
+
+      {/* 100+ Specialized AI File Agents Matrix Studio Modal */}
+      <FileAgentsStudioModal
+        isOpen={isFileStudioOpen}
+        onClose={() => setIsFileStudioOpen(false)}
+        initialExtension={fileStudioInitialExt}
+      />
+
+      {/* Gemini API Key Configuration Modal */}
+      <GeminiKeyModal
+        isOpen={isGeminiKeyModalOpen}
+        onClose={() => setIsGeminiKeyModalOpen(false)}
+        onKeyUpdated={(hasKey) => setHasCustomKey(hasKey)}
       />
     </div>
   );
